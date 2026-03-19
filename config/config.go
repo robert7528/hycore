@@ -56,6 +56,19 @@ func Load() *Config {
 	viper.SetDefault("log.filename", "logs/app.log")
 	viper.SetDefault("jwt.expiry_hours", 24)
 
+	// Explicit env bindings for nested keys (AutomaticEnv + Unmarshal is unreliable)
+	_ = viper.BindEnv("server.port", "SERVER_PORT")
+	_ = viper.BindEnv("server.mode", "SERVER_MODE")
+	_ = viper.BindEnv("database.dsn", "DATABASE_DSN")
+	_ = viper.BindEnv("log.level", "LOG_LEVEL")
+	_ = viper.BindEnv("log.filename", "LOG_FILENAME")
+	_ = viper.BindEnv("jwt.secret", "JWT_SECRET")
+	_ = viper.BindEnv("jwt.expiry_hours", "JWT_EXPIRY_HOURS")
+	_ = viper.BindEnv("jwt.issuer", "JWT_ISSUER")
+	_ = viper.BindEnv("jwt.jwks_uri", "JWT_JWKS_URI")
+	_ = viper.BindEnv("jwt.audience", "JWT_AUDIENCE")
+	_ = viper.BindEnv("tink.keyset", "TINK_KEYSET")
+
 	if err := viper.ReadInConfig(); err != nil {
 		log.Printf("config file not found, using defaults: %v", err)
 	}
